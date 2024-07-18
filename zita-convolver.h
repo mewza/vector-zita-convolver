@@ -36,10 +36,6 @@
 
 // Enable EQ application (check clv_process)
 
-#define EMBEDDED_EQ
-
-//#define OVERRIDE_AVFFT
-
 static constexpr double DEFAULT_MAC_COST = 1.0;
 static constexpr double DEFAULT_FFT_COST = 5.0;
 
@@ -644,11 +640,7 @@ private:
                    //if (((chn + 1) % 8) == 0 || chn == nch) {
                     //LOG("=== %d chn: %d nch: %d", k, chn, nch);
                     int offs = row * (_parsize + 1);
-#ifdef OVERRIDE_AVFFT
-                    _fft->real_fft( (zfloat*)_prep_data, (zfloat*)_freq_data, true );
-#else
                     _av.real_fft( (zfloat*)prep_data, (zfloat*)freq_data, _parsize * 2, true );
-#endif
                    
                     for (j = 0; j <= _parsize; j++) {
                         fftb[j + offs].re[ch] += freq_data[j].re;
@@ -1088,11 +1080,7 @@ private:
                     }
                 }
                 memset(td8 + _parsize, 0, _parsize * sizeof(zfloat8));
-#ifdef OVERRIDE_AVFFT
-                _fft8->real_fft( td8, (zfloat8*) ffta, true );
-#else
                 _av8.real_fft( td8, (zfloat8*) ffta, 2 * _parsize, true );
-#endif
             }
         }
         if (skip) {
@@ -1136,11 +1124,7 @@ private:
                 }
             }
             
-#ifdef OVERRIDE_AVFFT
-            _fft8->real_fft( (zfloat8*)_freq_data, (zfloat8*)_time_data, false );
-#else
             _av8.real_fft( (zfloat8*)_freq_data, (zfloat8*)_time_data, _parsize * 2, false );
-#endif
             outd = Y->_buff[opi1];
             
             for (k = 0; k < _parsize; k++)
