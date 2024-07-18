@@ -1,4 +1,4 @@
-Vector ZitaConvolver v1.0
+SIMD Vectorized Zita Convolver v1.0
 ------------------------------------------------------------------------------------------
 This is SIMD optimzized (vectorized) templated version of the latest Zita Convolver.
 It utilizes AVFFT SIMD vector optimized FFT for best performance, there may be bugs still, 
