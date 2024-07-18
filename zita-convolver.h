@@ -16,6 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
+// Note: It should work on any platform that supports pthreads (get const1 
+//       from avfft project)
 // ----------------------------------------------------------------------------
 
 
@@ -788,12 +790,7 @@ private:
         abspri += _prio;
         if (abspri > max) abspri = max;
         if (abspri < min) abspri = min;
-
-      //  _pthr = [NSOperationQueue new];
-      //  [_pthr addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
-      //      static_main(this);
-      //  }]] waitUntilFinished:NO];
-      
+        
         parm.sched_priority = abspri;
         pthread_attr_init (&attr);
         pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED);
@@ -804,10 +801,6 @@ private:
         pthread_attr_setstacksize (&attr, 0x10000);
         pthread_create (&_pthr, &attr, static_main, this);
         pthread_attr_destroy (&attr);
-        
-      //  [NSThread detachNewThreadWithName:@"zitaConvolver" withPriority: abspri withBlock:^{
-        //    static_main(this);
-       // }];
     }
 
     void stop (void)
@@ -1342,8 +1335,6 @@ protected:
     int              _opind;          // rotating output buffer index
     int              _bits;           // bit identifiying this level
     int              _wait;           // number of unfinished cycles
-    //NSOperationQueue *_pthr;
-    //NSThread      *_pthr;
     pthread_t        _pthr;          // posix thread executing this level
     ZCsema           _trig;          // sema used to trigger a cycle
     ZCsema           _done;          // sema used to wait for a cycle
