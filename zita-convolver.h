@@ -953,40 +953,7 @@ private:
                 }
                 if constexpr( doUseVector )
                     fftswap ((cmplxT<T> *)_freq_data);
-                if (_fftCycle >= 0)
-                {
-                    double scv = gVolume;
-                    
-                    cmplxT<T> *fd = _freq_data;
-                    cmplxT<mssFloat2> *dLR = _spec_data;
-                    
-                    if (_fftCycle == _cycleTot)
-                        memset(_spec_data, 0, _parsize * sizeof(cmplxT<mssFloat2>));
-                    
-                    if (_fftCycle & 1) 
-                    {
-                        for (int i=0; i<_parsize; i++)
-                        {
-                            cmplxT<T> si = fd[i] * scv;
-                            dLR[i].re[1] += si.re;
-                            dLR[i].im[1] += si.im;
-                        }
-                    } else 
-                    {
-                        for (int i=0; i<_parsize; i++)
-                        {
-                            cmplxT<T> si = fd[i] * scv;
-                            dLR[i].re[0] += si.re;
-                            dLR[i].im[0] += si.im;
-                        }
-                    }
-                    if (_fftCycle == 0) {
-                        specLock.lock();
-                        gFFTQueue.WriteData(_spec_data, _parsize * sizeof(cmplxT<mssFloat2>));
-                        specLock.unlock();
-                    }
-                    _fftCycle--;
-                }
+               
                 if constexpr( OVERRIDE_PFFFT )
                     _av.real_fft( (zfloat*)_freq_data, (zfloat*)_time_data, _parsize * 2, false );
                 else {
