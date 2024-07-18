@@ -427,8 +427,6 @@ private:
         _plan_r2c (0),
         _plan_c2r (0),
         _freq_data (0),
-        _fftCycle (0),
-        _cycleTot (0),
         _eq_active (false)
     {
     }
@@ -712,8 +710,6 @@ private:
         _wait = 0;
         _ptind = 0;
         _opind = 0;
-        _fftCycle = 0;
-        _cycleTot = 0;
         _trig.init (0, 0);
         _done.init (0, 0);
     }
@@ -755,8 +751,6 @@ private:
         _wait = 0;
         _ptind = 0;
         _opind = 0;
-        _fftCycle = 0;
-        _cycleTot = 0;
         _trig.init (0, 0);
         _done.init (0, 0);
     }
@@ -766,9 +760,7 @@ private:
         int                min, max;
         pthread_attr_t     attr;
         struct sched_param parm;
-        
-        _fftCycle = 0;
-        _cycleTot = 0;
+
         _pthr = 0;
         min = sched_get_priority_min (policy);
         max = sched_get_priority_max (policy);
@@ -826,8 +818,6 @@ private:
         _out_list = NULL;
         _ir_list = NULL;
         
-        _fftCycle = 0;
-        _cycleTot = 0;
     }
 
 
@@ -1266,8 +1256,6 @@ protected:
     Macnode          *_mlink;
     int              _inpmap[MAXINP]; // inputs map
     volatile long    _stat;           // current processing state
-    int              _cycleTot;       // cycles total
-    int              _fftCycle;       // cycle variable for sync
     int              _nch;            // number of total IR channels
     int              _prio;           // relative priority
     int              _offs;           // offset from start of impulse response
@@ -1616,8 +1604,6 @@ public:
         
         for (k = 0; k < _nlevels; k++) {
             int total = std::min(_nch,_nout)-1;
-            _convlev [k]->_fftCycle = total;
-            _convlev [k]->_cycleTot = total;
         }
         
         if (_outoffs == _minpart)
