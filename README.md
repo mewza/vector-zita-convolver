@@ -5,3 +5,5 @@ It utilizes AVFFT SIMD vector optimized FFT for best performance, there may be b
 but it works and it doesn't crash. What else... IT is FASTer than PFFFT'd ZitaConvolver.
 
 That's it for now.
+
+Only Use technology for benefit of humanity never to enslave it!
