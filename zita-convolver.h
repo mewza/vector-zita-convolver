@@ -568,8 +568,6 @@ private:
             mask[i + row * 8] = 0;
             neg[i] = 0;
         }
-        
-       // LOG("chn: %d nch: %d -> ", chn, nch); PRINT_I8(mask);
     }
     
     void impdata_write_AVFFT (int c, int *inp, int *out, int step, float *data, int i0, int i1, int nch, bool create)
@@ -581,10 +579,6 @@ private:
         
         int _inp = inp[c]-1;
         int _out = out[c]-1;
-        
-        // inp:  {   1, 2, 1, 2, 3, 4, 1, 2, 1, 2, 1, 4, 3, 2,  4, 3, 4, 3 };
-        // chn:  {   1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,  3, 4,10,11 };
-        // out:  {   1, 2, 3, 4, 5, 6, 7, 2, 1, 4, 3, 6, 5, 8,  4, 3, 4, 3 };
         
         _nch = nch;
         n = i1 - i0;
@@ -616,8 +610,7 @@ private:
             M1 = findmacnode_AVFFT( c, _inp, _out, false );
             if (!M1 || M1->_link || !M1->_fftb) return;
         }
-        
-      //  LOG("[ %d ] _npar: %d inp: %d out: %d row: %d rows: %d ch: %d ach: %d", chn, _npar, _inp, _out, row, rows, ch+1, ach);
+
         norm = 0.5 / (zfloat)_parsize;
         for (k = 0; k<_npar; k++)
         {
@@ -639,8 +632,6 @@ private:
                     for (j = j0; j < j1; j++) {
                         prep_data[j - i0] = norm * data [j * step]; // * norm
                     }
-                   //if (((chn + 1) % 8) == 0 || chn == nch) {
-                    //LOG("=== %d chn: %d nch: %d", k, chn, nch);
                     int offs = row * (_parsize + 1);
                     _av.real_fft( (zfloat*)prep_data, (zfloat*)freq_data, _parsize * 2, true );
                    
@@ -648,9 +639,6 @@ private:
                         fftb[j + offs].re[ch] += freq_data[j].re;
                         fftb[j + offs].im[ch] += freq_data[j].im;
                     }
-                    //  PRINT_D8(fftb[0].re);
-                  //  }
-                    //LOG("%d row: %d chn: %d", k, row, ((chn+1) % 8));
                 }
             }
             i0 = i1;
@@ -685,7 +673,6 @@ private:
         M2->_link = M1;
     }
 
-    // USE_AVFFT
     void reset (int inpsize, int outsize, zfloat4 *inpbuff, zfloat8 *outbuff)
     {
         int     i;
@@ -731,7 +718,6 @@ private:
         _done.init (0, 0);
     }
     
-    // USE_PFFFT
     void reset (int inpsize, int outsize, T **inpbuff, T **outbuff)
     {
         int     i;
@@ -747,7 +733,6 @@ private:
         _inpbuff = inpbuff;
         _outbuff = outbuff;
 
-        //X = _inp_list;
         for (X = _inp_list; X; X = X->_next)
             for (i = 0; i < _npar; i++)
                 memset (X->_ffta [i], 0, (_parsize + 1) * sizeof (cmplxT<zfloat>));
@@ -860,8 +845,6 @@ private:
             _trig.wait ();
             if (_stat == ST_TERM) {
                 if (_pthr) {
-                    //[_pthr cancelAllOperations];
-                    // [_pthr cancel];
                         pthread_join(_pthr, NULL);
                         pthread_cancel(_pthr);
                 }
@@ -939,8 +922,6 @@ private:
                     {
                         ffta = (cmplxT<T>*)X1->_ffta[i];
                         fftb = (cmplxT<T>*) ((M1->_link) ? M1->_link->_fftb [j] : M1->_fftb [j]);
-                         //PRINT_D1(ffta[1].re);
-                        // PRINT_D1(fftb[1].re);
                         if (fftb)
                         {
                             if constexpr( doUseVector )
@@ -1185,12 +1166,11 @@ private:
             zfloat8  *p, *q;
             
             auto Y = _out_list;
-            //for (; Y; Y = Y->_next) {
             p = ((zfloat8*)Y->_buff [_opind]) + _outoffs;
-            q = _outbuff_8; // [Y->_out];
+            q = _outbuff_8;
             for (i = 0; i < _outsize; i++)
                 q[i] += p [i];
-           // }
+        
         } else {  // PFFFT
             T   *p, *q;
             for (auto Y = _out_list; Y; Y = Y->_next) {
