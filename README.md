@@ -12,3 +12,9 @@ there may be bugs still use at your own risk, or fix them and send me fixes.. bu
 it doesn't crash. What else... IT is FASTer than PFFFT'd ZitaConvolver.
 
 Only Use technology for benefit of humanity never to enslave it!
+
+Dmitry Boldyrev <subband@protonmail.com>
+
+(Real inventor and developer of WinAmp unlike fake Justin Frankel who stole it from me 
+and lied to you all that he was behind it . CIA suppressed credentials for me for 10+ years
+destroyed my reputation, just because I was born in USSR. This is the real truth!)
